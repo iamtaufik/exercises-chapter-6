@@ -21,19 +21,31 @@ const updateProfile = async (req, res) => {
       folder: '/images',
     });
 
-    const profile = await prisma.profile.update({
+    const user = await prisma.user.update({
       where: {
-        userId: req.user.id,
+        id: req.user.id,
       },
       data: {
-        first_name,
-        last_name,
-        brith_date: new Date(brith_date).toISOString(),
-        profile_picture: url,
+        profile: {
+          upsert: {
+            create: {
+              first_name,
+              last_name,
+              brith_date: new Date(brith_date).toISOString(),
+              profile_picture: url,
+            },
+            update: {
+              first_name,
+              last_name,
+              brith_date: new Date(brith_date).toISOString(),
+              profile_picture: url,
+            },
+          },
+        },
       },
     });
-
-    res.status(201).json({ success: true, message: 'User updated successfully', data: profile });
+    delete user.password;
+    res.status(201).json({ success: true, message: 'User updated successfully', data: user });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message, data: null });
   }
