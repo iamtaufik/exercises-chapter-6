@@ -1,0 +1,44 @@
+const prisma = require('../libs/prisma');
+const imagekit = require('../libs/imagekit');
+const path = require('path');
+
+const updateProfile = async (req, res) => {
+  try {
+    const { first_name, last_name, brith_date } = req.body;
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Missing file', data: null });
+    }
+
+    const file = req.file.buffer.toString('base64');
+
+    if (!first_name || !last_name || !brith_date) {
+      return res.status(400).json({ success: false, message: 'Missing first_name, last_name, brith_date, profile_picture', data: null });
+    }
+
+    const { url } = await imagekit.upload({
+      file,
+      fileName: `${Date.now()}-${req.file.originalname}-profile`,
+      folder: '/images',
+    });
+
+    const profile = await prisma.profile.update({
+      where: {
+        userId: req.user.id,
+      },
+      data: {
+        first_name,
+        last_name,
+        brith_date: new Date(brith_date).toISOString(),
+        profile_picture: url,
+      },
+    });
+
+    res.status(201).json({ success: true, message: 'User updated successfully', data: profile });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message, data: null });
+  }
+};
+
+module.exports = {
+  updateProfile,
+};
