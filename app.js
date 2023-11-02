@@ -10,4 +10,8 @@ const profileRoutes = require('./routes/profile.routes');
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/profile', profileRoutes);
 
+app.get('/', (req, res) => {
+  res.status(200).json({ success: true, message: 'Welcome to my API' });
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
