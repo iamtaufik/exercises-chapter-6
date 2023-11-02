@@ -18,7 +18,7 @@ const updateProfile = async (req, res) => {
     const { url } = await imagekit.upload({
       file,
       fileName: `${Date.now()}-${req.file.originalname}-profile`,
-      folder: '/images',
+      folder: '/dev/images',
     });
 
     const user = await prisma.user.update({
