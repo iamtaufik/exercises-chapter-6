@@ -23,10 +23,10 @@ jobs:
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
-      # - name: run migration
-      #   run: railway run --service ${{ secrets.RAILWAY_SERVICE_ID }} npx prisma migrate deploy
-      #   env:
-      #     RAILWAY_TOKEN: ${{ secrets.RAILWAY_PROD_TOKEN }}
+      - name: run migration
+        run: railway run --service ${{ secrets.RAILWAY_SERVICE_ID }} npx prisma migrate deploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_PROD_TOKEN }}
 
       - name: deploy to Railway
         run: railway up --service ${{ secrets.RAILWAY_SERVICE_ID }}
