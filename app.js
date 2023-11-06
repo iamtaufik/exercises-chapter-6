@@ -18,7 +18,7 @@ Sentry.init({
     new Sentry.Integrations.Express({ app }),
   ],
   tracesSampleRate: 1.0,
-  environment: process.env.ENV,
+  environment: process.env.RAILWAY_ENVIRONMENT_NAME,
 });
 
 // The request handler must be the first middleware on the app
@@ -31,7 +31,7 @@ app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/profile', profileRoutes);
 
 app.get('/', (req, res) => {
-  console.log(name)
+  console.log(name);
   res.status(200).json({ success: true, message: 'Welcome to my development API' });
 });
 
